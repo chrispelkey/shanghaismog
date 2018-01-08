@@ -6,12 +6,16 @@ library(timeSeries)
 library(astsa)
 
 # Read in the data
-# ts_df <- read_csv("C:/Users/cpelkey/Desktop/Data/Smog/Smog/Smog.csv")
-ts_df <- read_csv("~/shanghaismog/Beijing_2008_HourlyPM2.5_created20140325.csv")
+ts_df <- read_csv("C:/Users/cpelkey/Desktop/Data/Smog/Smog/Smog.csv")
+# ts_df <- read_csv("~/shanghaismog/Beijing_2008_HourlyPM2.5_created20140325.csv")
 ts_df <- as.data.frame(ts_df)
 
-# Convert to date format
+# Convert to date format and remove duplicative entries
 ts_df$Date <- as.POSIXct(strptime(ts_df$Date, format = "%m/%d/%Y %H:%M"))
+which(duplicated(ts_df$Date))
+
+# 6675 15579 24315 41786 50523 59259 68163 76899
+ts_df <- ts_df[-c(6675, 15579, 24315, 41786, 50523, 59259, 68163, 76899),]
 
 # Add in missing times from the time series
 temp.zoo <- zoo(x = ts_df[,2], order.by = ts_df[,1])
